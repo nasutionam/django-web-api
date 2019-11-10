@@ -1,6 +1,6 @@
 from django.urls import path
 #from .views import article_list_create_api_view, article_detail_create_api_view
-from .views import ArticleDetailAPIView, ArticleListCreateAPIView
+from .views import ArticleDetailAPIView, ArticleListCreateAPIView, JournalistListCreateAPIView
 
 
 urlpatterns = [
@@ -8,5 +8,8 @@ urlpatterns = [
     # path("articles/<int:pk>/", article_detail_create_api_view, name="article-detail")
 
     path("articles/", ArticleListCreateAPIView.as_view(), name="article-list"),
-    path("articles/<int:pk>/", ArticleDetailAPIView.as_view(), name="article-detail")
+    path("articles/<int:pk>/", ArticleDetailAPIView.as_view(), name="article-detail"),
+
+    path("journalists/", JournalistListCreateAPIView.as_view(), name="journalist-list"),
+
 ]

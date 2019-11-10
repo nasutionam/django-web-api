@@ -1,11 +1,14 @@
 from datetime import datetime
 from django.utils.timesince import timesince
-from rest_framework import serializers  
-from ..models import Article
+from rest_framework import serializers
+from ..models import Article, Journalist
+
 
 class ArticleSerializer(serializers.ModelSerializer):
-    
+
     time_since_publication = serializers.SerializerMethodField()
+    # author = JournalistSerializer(read_only=True)
+    # author = serializers.StringRelatedField()
 
     class Meta:
         model = Article
@@ -14,13 +17,13 @@ class ArticleSerializer(serializers.ModelSerializer):
         # fields = ("title", "description", "body") # I want to choose a couple of fields
 
     def get_time_since_publication(self, object):
-        publication_date = object.publication_date  
+        publication_date = object.publication_date
         now = datetime.now()
         time_delta = timesince(publication_date, now)
         return time_delta
 
     def validate(self, data):
-        """ 
+        """
             check that description and title are different
         """
         if data["title"] == data["description"]:
@@ -31,6 +34,16 @@ class ArticleSerializer(serializers.ModelSerializer):
         if len(value) < 20:
             raise serializers.ValidationError("The title has no to be at least 60 characters")
         return value
+
+
+class JournalistSerializer(serializers.ModelSerializer):
+    # articles = ArticleSerializer(many=True, read_only=True)
+    articles = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name="article-detail")
+
+    class Meta:
+        model = Journalist
+        exclude = ("id",)
+        #fields = "__all__"
 
 
 
@@ -62,7 +75,7 @@ class ArticleSerializer(serializers.ModelSerializer):
 #         return instance
 
 #     def validate(self, data):
-#         """ 
+#         """
 #             check that description and title are different
 #         """
 #         if data["title"] == data["description"]:
