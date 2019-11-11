@@ -15,7 +15,7 @@ class Review(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     review_author = models.CharField(max_length=8, blank=True, null=True)
     review = models.TextField(blank=True, null=True)
-    rating = models.PositiveIntegerField(validators=[MinLengthValidator(1), MaxLengthValidator(5)])
+    rating = models.PositiveIntegerField()
     ebook = models.ForeignKey(Ebook, on_delete=models.CASCADE, related_name='reviews')
 
     def __str__(self):
