@@ -18,14 +18,16 @@ def index(request):
     for city in cities:
         r = requests.get(url.format(city)).json()
 
-        city_weather = {
-            'city': city.name,
-            'temperature' : r['main']['temp'],
-            'description': r['weather'][0]['description'],
-            'icon': r['weather'][0]['icon']
-        }
+        if r['cod'] == 200:
+            city_weather = {
+                'city': city.name,
+                'temperature' : r['main']['temp'],
+                'description': r['weather'][0]['description'],
+                'icon': r['weather'][0]['icon']
+            }
 
-        weather_data.append(city_weather)
-
+            weather_data.append(city_weather)
+            
+    print(weather_data)
     context = {'weather_data': weather_data, 'form': form}
     return render(request, 'wheater/wheater.html', context)
