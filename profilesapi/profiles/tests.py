@@ -23,3 +23,23 @@ class RegistrationTestCase(APITestCase):
         response = self.client.post("/api/rest-auth/registration/", data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.json())
 
+class ProfileViewSetTestCase(APITestCase):
+
+    list_url = reverse("profile-list")
+
+    def setUp(self):
+        self.user = User.objects.create_user(username="jhon", password="Testing100x")
+        self.token = Token.objects.create(user=self.user)
+        self.api_authentication()
+
+    def api_authentication(self):
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
+    
+    def test_profile_list_authenticated(self):
+        response = self.client.get(self.list_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.json())
+
+    def test_profile_list_un_authenticated(self):
+        self.client.force_authenticate(user=None)
+        response = self.client.get(self.list_url)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN, response.json())
