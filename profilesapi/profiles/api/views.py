@@ -5,8 +5,17 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework import viewsets
 from rest_framework import mixins
 from ..models import Profile, ProfileStatus
-from .serializers import ProfileSerializer, ProfileStatusSerializer
+from .serializers import ProfileSerializer, ProfileStatusSerializer, ProfileAvatarSerializer
 from .permissions import IsOwnProfileOrReadOnly, IsOwnerOrReadOnly
+
+
+class AvatarUpdateView(generics.UpdateAPIView):
+    serializer_class = ProfileAvatarSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        profile_object = self.request.user.profile
+        return  profile_object
 
 
 class ProfileViewSet(mixins.UpdateModelMixin,
