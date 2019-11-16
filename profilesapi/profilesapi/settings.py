@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
 
+    
     'rest_framework',
     'rest_framework.authtoken',
     
@@ -48,7 +49,7 @@ INSTALLED_APPS = [
 
     'rest_auth',
     'rest_auth.registration',
-
+    'rest_framework_swagger',
     'profiles'
 ]
 
@@ -142,6 +143,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ]
 }
 
